@@ -19,6 +19,7 @@ async function start() {
   await initDB();
 
   app.get("/", home);
+  app.get("/home", home);
   app.get("/logout", logout);
 
   app.route("/login")

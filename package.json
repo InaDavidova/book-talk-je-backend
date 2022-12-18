@@ -1,5 +1,5 @@
 {
-  "name": "exam",
+  "name": "book-talk",
   "version": "1.0.0",
   "description": "Backend application built with Express.js, Handelbars and Mongoose",
   "main": "index.js",

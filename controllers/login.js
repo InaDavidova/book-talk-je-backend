@@ -1,41 +1,37 @@
 const { login } = require("../services/auth");
 const mapErrors = require("../util/mapErrors");
-const validateRequiredFields = require("../util/validateRequiredFields");
 
 module.exports = {
   get(req, res) {
     res.render("login", { title: "Login Page" });
   },
   async post(req, res) {
-
-    // Change identifier (email/username)
-    
     let { email, password } = req.body;
 
     email = email.trim();
     password = password.trim();
 
-    const requiredFieldsValidation = validateRequiredFields({
-      email,
-      password,
-    });
-
     try {
-      if (requiredFieldsValidation.length != 0) {
-        throw requiredFieldsValidation;
+      if (!email || !password) {
+        throw new Error("All fields are required!");
       }
-      
+
       const user = await login(email, password);
 
       req.session.user = {
         id: user._id,
         email: user.email,
+        username: user.username,
       };
 
       res.redirect("/");
     } catch (err) {
       const errors = mapErrors(err);
-      res.render("login", { errors, user: { email, password }, title:"Login Page" });
+      res.render("login", {
+        error: errors[0],
+        user: { email, password },
+        title: "Login Page",
+      });
     }
   },
 };
